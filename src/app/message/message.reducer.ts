@@ -34,7 +34,8 @@ export function reducer(
     }
 
     case MessageActionTypes.DeleteMessage: {
-      return adapter.removeOne(action.payload.id, state);
+      const loadingState = {...state, isLoading: true};
+      return adapter.removeOne(action.payload.id, loadingState);
     }
 
     case MessageActionTypes.DeleteMessageSuccess: {
