@@ -1,3 +1,4 @@
-<p>
-  list works!
-</p>
+<div *ngFor="let message of messages">
+  <span>{{ message.text }}</span>
+  <button (click)="deleteMessage.emit(message.id)" [disabled]="isLoading">Borrar</button>
+</div>
