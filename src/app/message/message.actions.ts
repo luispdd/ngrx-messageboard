@@ -5,14 +5,11 @@ import { Message } from './message.model';
 export enum MessageActionTypes {
   LoadMessages = '[Message] Load Messages',
   AddMessage = '[Message] Add Message',
-  UpsertMessage = '[Message] Upsert Message',
-  AddMessages = '[Message] Add Messages',
-  UpsertMessages = '[Message] Upsert Messages',
-  UpdateMessage = '[Message] Update Message',
-  UpdateMessages = '[Message] Update Messages',
+  AddMessageSuccess = '[Message] Add Message Success',
+  AddMessageError = '[Message] Add Message Error',
   DeleteMessage = '[Message] Delete Message',
-  DeleteMessages = '[Message] Delete Messages',
-  ClearMessages = '[Message] Clear Messages'
+  DeleteMessageSuccess = '[Message] Delete Message Success',
+  DeleteMessageError = '[Message] Delete Message Error',
 }
 
 export class LoadMessages implements Action {
@@ -27,34 +24,14 @@ export class AddMessage implements Action {
   constructor(public payload: { message: Message }) {}
 }
 
-export class UpsertMessage implements Action {
-  readonly type = MessageActionTypes.UpsertMessage;
-
-  constructor(public payload: { message: Message }) {}
+export class AddMessageSuccess implements Action {
+  readonly type = MessageActionTypes.AddMessageSuccess;
 }
 
-export class AddMessages implements Action {
-  readonly type = MessageActionTypes.AddMessages;
+export class AddMessageError implements Action {
+  readonly type = MessageActionTypes.AddMessageError;
 
-  constructor(public payload: { messages: Message[] }) {}
-}
-
-export class UpsertMessages implements Action {
-  readonly type = MessageActionTypes.UpsertMessages;
-
-  constructor(public payload: { messages: Message[] }) {}
-}
-
-export class UpdateMessage implements Action {
-  readonly type = MessageActionTypes.UpdateMessage;
-
-  constructor(public payload: { message: Update<Message> }) {}
-}
-
-export class UpdateMessages implements Action {
-  readonly type = MessageActionTypes.UpdateMessages;
-
-  constructor(public payload: { messages: Update<Message>[] }) {}
+  constructor(public payload: { error: any }) {}
 }
 
 export class DeleteMessage implements Action {
@@ -63,24 +40,22 @@ export class DeleteMessage implements Action {
   constructor(public payload: { id: string }) {}
 }
 
-export class DeleteMessages implements Action {
-  readonly type = MessageActionTypes.DeleteMessages;
-
-  constructor(public payload: { ids: string[] }) {}
+export class DeleteMessageSuccess implements Action {
+  readonly type = MessageActionTypes.DeleteMessageSuccess;
 }
 
-export class ClearMessages implements Action {
-  readonly type = MessageActionTypes.ClearMessages;
+export class DeleteMessageError implements Action {
+  readonly type = MessageActionTypes.DeleteMessageError;
+
+  constructor(public payload: { error: any }) {}
 }
+
 
 export type MessageActions =
  LoadMessages
  | AddMessage
- | UpsertMessage
- | AddMessages
- | UpsertMessages
- | UpdateMessage
- | UpdateMessages
+ | AddMessageSuccess
+ | AddMessageError
  | DeleteMessage
- | DeleteMessages
- | ClearMessages;
+ | DeleteMessageSuccess
+ | DeleteMessageError;
