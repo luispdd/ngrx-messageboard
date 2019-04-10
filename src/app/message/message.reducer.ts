@@ -1,15 +1,18 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { Message } from './message.model';
 import { MessageActions, MessageActionTypes } from './message.actions';
 
 export interface State extends EntityState<Message> {
-  // additional entities state properties
+  isLoading: boolean,
+  error: any
 }
 
 export const adapter: EntityAdapter<Message> = createEntityAdapter<Message>();
 
 export const initialState: State = adapter.getInitialState({
-  // additional entity state properties
+  isLoading: false,
+  error: {}
 });
 
 export function reducer(
@@ -18,43 +21,32 @@ export function reducer(
 ): State {
   switch (action.type) {
     case MessageActionTypes.AddMessage: {
-      return adapter.addOne(action.payload.message, state);
+      const loadingState = {...state, isLoading: true};
+      return adapter.addOne(action.payload.message, loadingState);
     }
 
-    case MessageActionTypes.UpsertMessage: {
-      return adapter.upsertOne(action.payload.message, state);
+    case MessageActionTypes.AddMessageSuccess: {
+      return {...state, isLoading: false, error: {}};
     }
 
-    case MessageActionTypes.AddMessages: {
-      return adapter.addMany(action.payload.messages, state);
-    }
-
-    case MessageActionTypes.UpsertMessages: {
-      return adapter.upsertMany(action.payload.messages, state);
-    }
-
-    case MessageActionTypes.UpdateMessage: {
-      return adapter.updateOne(action.payload.message, state);
-    }
-
-    case MessageActionTypes.UpdateMessages: {
-      return adapter.updateMany(action.payload.messages, state);
+    case MessageActionTypes.AddMessageError: {
+      return {...state, isLoading: false, error: action.payload.error};
     }
 
     case MessageActionTypes.DeleteMessage: {
       return adapter.removeOne(action.payload.id, state);
     }
 
-    case MessageActionTypes.DeleteMessages: {
-      return adapter.removeMany(action.payload.ids, state);
+    case MessageActionTypes.DeleteMessageSuccess: {
+      return {...state, isLoading: false, error: {}};
+    }
+
+    case MessageActionTypes.DeleteMessageError: {
+      return {...state, isLoading: false, error: action.payload.error};
     }
 
     case MessageActionTypes.LoadMessages: {
       return adapter.addAll(action.payload.messages, state);
-    }
-
-    case MessageActionTypes.ClearMessages: {
-      return adapter.removeAll(state);
     }
 
     default: {
@@ -63,9 +55,29 @@ export function reducer(
   }
 }
 
-export const {
+const {
   selectIds,
   selectEntities,
-  selectAll,
-  selectTotal,
 } = adapter.getSelectors();
+
+export const getState = createFeatureSelector<State>('message');
+
+export const getMessages = createSelector(
+  getState,
+  selectEntities
+);
+
+export const getIds = createSelector(
+  getState,
+  selectIds
+);
+
+export const getLoading = createSelector(
+  getState,
+  (state: State) => state.isLoading
+);
+
+export const getError = createSelector(
+  getState,
+  (state: State) => state.error
+);
