@@ -29,7 +29,7 @@ export class MessageEffects {
   @Effect()
   deleteMessage$ = this.actions$
     .pipe(
-      ofType(fromActions.MessageActionTypes.AddMessage),
+      ofType(fromActions.MessageActionTypes.DeleteMessage),
       mergeMap((action: fromActions.DeleteMessage) => from(['fakeServiceResponse'])
         .pipe(
           delay(2000),
