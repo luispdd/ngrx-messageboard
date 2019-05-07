@@ -11,7 +11,7 @@ import * as fromActions from './message/message.actions';
 })
 export class AppComponent {
 
-  newMessage: string;
+  newMessage: string = '';
   nextId: string;
   messages: Message[];
   isLoading: boolean;
