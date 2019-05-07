@@ -1,12 +1,26 @@
 import { TestBed, async } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { FormsModule } from '@angular/forms';
+import { ListComponent } from './list/list.component';
+import { StoreModule } from '@ngrx/store';
+import * as fromMessage from './message/message.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { MessageEffects } from './message/message.effects';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
-        AppComponent
+        AppComponent,
+        ListComponent
       ],
+      imports: [
+        FormsModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature('message', fromMessage.reducer),
+        EffectsModule.forRoot([]),
+        EffectsModule.forFeature([MessageEffects]),
+      ]
     }).compileComponents();
   }));
 
@@ -16,16 +30,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'ngrx-messages'`, () => {
+  it(`should have as default newMessage ''`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('ngrx-messages');
+    expect(app.newMessage).toEqual('');
   });
 
   it('should render title in a h1 tag', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to ngrx-messages!');
+    expect(compiled.querySelector('h1').textContent).toContain('Añadir mensaje');
   });
 });
